@@ -5,6 +5,8 @@ const { loadImage, createCanvas } = require("canvas");
 module.exports = {
   config: {
     name: "pair2",
+    version:"1.0",
+    author:"eran_hossain",
     countDown: 10,
     role: 0,
     shortDescription: {
