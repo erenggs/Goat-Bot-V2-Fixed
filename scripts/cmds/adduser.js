@@ -1,140 +1,116 @@
-const { findUid } = global.utils;
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const { config } = global.GoatBot;
+const { writeFileSync } = require("fs-extra");
 
 module.exports = {
 	config: {
-		name: "adduser",
-		version: "1.5",
+		name: "admin",
+		version: "1.6",
 		author: "NTKhang",
 		countDown: 5,
-		role: 1,
+		role: 2,
 		description: {
-			vi: "Thêm thành viên vào box chat của bạn",
-			en: "Add user to box chat of you"
+			vi: "Thêm, xóa, sửa quyền admin",
+			en: "Add, remove, edit admin role"
 		},
 		category: "box chat",
 		guide: {
-			en: "   {pn} [link profile | uid]"
+			vi: '   {pn} [add | -a] <uid | @tag>: Thêm quyền admin cho người dùng'
+				+ '\n	  {pn} [remove | -r] <uid | @tag>: Xóa quyền admin của người dùng'
+				+ '\n	  {pn} [list | -l]: Liệt kê danh sách admin',
+			en: '   {pn} [add | -a] <uid | @tag>: Add admin role for user'
+				+ '\n	  {pn} [remove | -r] <uid | @tag>: Remove admin role of user'
+				+ '\n	  {pn} [list | -l]: List all admins'
 		}
 	},
 
 	langs: {
 		vi: {
-			alreadyInGroup: "Đã có trong nhóm",
-			successAdd: "- Đã thêm thành công %1 thành viên vào nhóm",
-			failedAdd: "- Không thể thêm %1 thành viên vào nhóm",
-			approve: "- Đã thêm %1 thành viên vào danh sách phê duyệt",
-			invalidLink: "Vui lòng nhập link facebook hợp lệ",
-			cannotGetUid: "Không thể lấy được uid của người dùng này",
-			linkNotExist: "Profile url này không tồn tại",
-			cannotAddUser: "Bot bị chặn tính năng hoặc người dùng này chặn người lạ thêm vào nhóm"
+			added: "✅ | Đã thêm quyền admin cho %1 người dùng:\n%2",
+			alreadyAdmin: "\n⚠️ | %1 người dùng đã có quyền admin từ trước rồi:\n%2",
+			missingIdAdd: "⚠️ | Vui lòng nhập ID hoặc tag người dùng muốn thêm quyền admin",
+			removed: "✅ | Đã xóa quyền admin của %1 người dùng:\n%2",
+			notAdmin: "⚠️ | %1 người dùng không có quyền admin:\n%2",
+			missingIdRemove: "⚠️ | Vui lòng nhập ID hoặc tag người dùng muốn xóa quyền admin",
+			listAdmin: "👑 | Danh sách admin:\n%1"
 		},
 		en: {
-			alreadyInGroup: "Already in group",
-			successAdd: "- Successfully added %1 members to the group",
-			failedAdd: "- Failed to add %1 members to the group",
-			approve: "- Added %1 members to the approval list",
-			invalidLink: "Please enter a valid facebook link",
-			cannotGetUid: "Cannot get uid of this user",
-			linkNotExist: "This profile url does not exist",
-			cannotAddUser: "Bot is blocked or this user blocked strangers from adding to the group"
+			added: "✅ | Added admin role for %1 users:\n%2",
+			alreadyAdmin: "\n⚠️ | %1 users already have admin role:\n%2",
+			missingIdAdd: "⚠️ | Please enter ID or tag user to add admin role",
+			removed: "✅ | Removed admin role of %1 users:\n%2",
+			notAdmin: "⚠️ | %1 users don't have admin role:\n%2",
+			missingIdRemove: "⚠️ | Please enter ID or tag user to remove admin role",
+			listAdmin: "👑 | List of admins:\n%1"
 		}
 	},
 
-	onStart: async function ({ message, api, event, args, threadsData, getLang }) {
-		const { members, adminIDs, approvalMode } = await threadsData.get(event.threadID);
-		const botID = api.getCurrentUserID();
-
-		const success = [
-			{
-				type: "success",
-				uids: []
-			},
-			{
-				type: "waitApproval",
-				uids: []
-			}
-		];
-		const failed = [];
-
-		function checkErrorAndPush(messageError, item) {
-			item = item.replace(/(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)/i, '');
-			const findType = failed.find(error => error.type == messageError);
-			if (findType)
-				findType.uids.push(item);
-			else
-				failed.push({
-					type: messageError,
-					uids: [item]
-				});
-		}
-
-		const regExMatchFB = /(?:https?:\/\/)?(?:www\.)?(?:facebook|fb|m\.facebook)\.(?:com|me)\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]+)(?:\/)?/i;
-		for (const item of args) {
-			let uid;
-			let continueLoop = false;
-
-			if (isNaN(item) && regExMatchFB.test(item)) {
-				for (let i = 0; i < 10; i++) {
-					try {
-						uid = await findUid(item);
-						break;
-					}
-					catch (err) {
-						if (err.name == "SlowDown" || err.name == "CannotGetData") {
-							await sleep(1000);
-							continue;
-						}
-						else if (i == 9 || (err.name != "SlowDown" && err.name != "CannotGetData")) {
-							checkErrorAndPush(
-								err.name == "InvalidLink" ? getLang('invalidLink') :
-									err.name == "CannotGetData" ? getLang('cannotGetUid') :
-										err.name == "LinkNotExist" ? getLang('linkNotExist') :
-											err.message,
-								item
-							);
-							continueLoop = true;
-							break;
-						}
-					}
-				}
-			}
-			else if (!isNaN(item))
-				uid = item;
-			else
-				continue;
-
-			if (continueLoop == true)
-				continue;
-
-			if (members.some(m => m.userID == uid && m.inGroup)) {
-				checkErrorAndPush(getLang("alreadyInGroup"), item);
-			}
-			else {
-				try {
-					await api.addUserToGroup(uid, event.threadID);
-					if (approvalMode === true && !adminIDs.includes(botID))
-						success[1].uids.push(uid);
+	onStart: async function ({ message, args, usersData, event, getLang }) {
+		switch (args[0]) {
+			case "add":
+			case "-a": {
+				if (args[1]) {
+					let uids = [];
+					if (Object.keys(event.mentions).length > 0)
+						uids = Object.keys(event.mentions);
+					else if (event.messageReply)
+						uids.push(event.messageReply.senderID);
 					else
-						success[0].uids.push(uid);
+						uids = args.filter(arg => !isNaN(arg));
+					const notAdminIds = [];
+					const adminIds = [];
+					for (const uid of uids) {
+						if (config.adminBot.includes(uid))
+							adminIds.push(uid);
+						else
+							notAdminIds.push(uid);
+					}
+
+					config.adminBot.push(...notAdminIds);
+					const getNames = await Promise.all(uids.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
+					writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
+					return message.reply(
+						(notAdminIds.length > 0 ? getLang("added", notAdminIds.length, getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")) : "")
+						+ (adminIds.length > 0 ? getLang("alreadyAdmin", adminIds.length, adminIds.map(uid => `• ${uid}`).join("\n")) : "")
+					);
 				}
-				catch (err) {
-					checkErrorAndPush(getLang("cannotAddUser"), item);
-				}
+				else
+					return message.reply(getLang("missingIdAdd"));
 			}
+			case "remove":
+			case "-r": {
+				if (args[1]) {
+					let uids = [];
+					if (Object.keys(event.mentions).length > 0)
+						uids = Object.keys(event.mentions)[0];
+					else
+						uids = args.filter(arg => !isNaN(arg));
+					const notAdminIds = [];
+					const adminIds = [];
+					for (const uid of uids) {
+						if (config.adminBot.includes(uid))
+							adminIds.push(uid);
+						else
+							notAdminIds.push(uid);
+					}
+					for (const uid of adminIds)
+						config.adminBot.splice(config.adminBot.indexOf(uid), 1);
+					const getNames = await Promise.all(adminIds.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
+					writeFileSync(global.client.dirConfig, JSON.stringify(config, null, 2));
+					return message.reply(
+						(adminIds.length > 0 ? getLang("removed", adminIds.length, getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")) : "")
+						+ (notAdminIds.length > 0 ? getLang("notAdmin", notAdminIds.length, notAdminIds.map(uid => `• ${uid}`).join("\n")) : "")
+					);
+				}
+				else
+					return message.reply(getLang("missingIdRemove"));
+			}
+			case "list":
+			case "-l": {
+				const getNames = await Promise.all(config.adminBot.map(uid => usersData.getName(uid).then(name => ({ uid, name }))));
+				return message.reply(getLang("listAdmin", getNames.map(({ uid, name }) => `• ${name} (${uid})`).join("\n")));
+			}
+			default:
+				return message.SyntaxError();
 		}
-
-		const lengthUserSuccess = success[0].uids.length;
-		const lengthUserWaitApproval = success[1].uids.length;
-		const lengthUserError = failed.length;
-
-		let msg = "";
-		if (lengthUserSuccess)
-			msg += `${getLang("successAdd", lengthUserSuccess)}\n`;
-		if (lengthUserWaitApproval)
-			msg += `${getLang("approve", lengthUserWaitApproval)}\n`;
-		if (lengthUserError)
-			msg += `${getLang("failedAdd", failed.reduce((a, b) => a + b.uids.length, 0))} ${failed.reduce((a, b) => a += `\n    + ${b.uids.join('\n       ')}: ${b.type}`, "")}`;
-		await message.reply(msg);
 	}
 };
