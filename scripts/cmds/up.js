@@ -3,10 +3,10 @@
  * @type {CassidySpectra.CommandMeta}
  */
 export const meta = {
-  name: "troll",
+  name: "up",
   description: "Risk your money with this stupid game.",
   version: "1.0.0",
-  author: "Liane Cagara",
+  author: "eran_hossain",
   usage: "{prefix}{name}",
   category: "Gambling Games",
   permissions: [0],
