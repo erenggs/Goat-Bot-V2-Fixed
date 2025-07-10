@@ -3,7 +3,7 @@ module.exports = {
     name: "help",
     aliases: ["menu", "commands"],
     version: "3.1",
-    author: "nexo_here",
+    author: "eran_hossain",
     shortDescription: "Show all available commands",
     longDescription: "Display a categorized list of all available commands.",
     category: "system",
@@ -87,7 +87,7 @@ module.exports = {
       msg += `╰────────♢\n\n`;
     }
 
-    msg += `◎ Eren Ai\n`;
+    msg += `◎ Eran_hoosain Ai\n`;
     msg += `Total Commands » ${total}\n`;
     msg += `Use help (cmd name) to see cmd usage details`;
 
