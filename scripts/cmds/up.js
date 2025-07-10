@@ -7,7 +7,7 @@ module.exports = {
     name: "uptime",
     aliases: ["up", "upt"],
     version: "3.0",
-    author: "eran_hossain",
+    author: "nexo_here",
     cooldowns: 5,
     role: 0,
     shortDescription: "Bot's system status",
@@ -172,4 +172,4 @@ function roundRect(ctx, x, y, w, h, r, fill, stroke) {
   ctx.closePath();
   if (fill) ctx.fill();
   if (stroke) ctx.stroke();
-                  }
+}
