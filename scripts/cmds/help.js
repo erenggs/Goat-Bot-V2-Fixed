@@ -87,7 +87,7 @@ module.exports = {
       msg += `╰────────♢\n\n`;
     }
 
-    msg += `◎ Eran_hoosain Ai\n`;
+    msg += `◎ Eran_hossain Ai\n`;
     msg += `Total Commands » ${total}\n`;
     msg += `Use help (cmd name) to see cmd usage details`;
 
