@@ -1,41 +1,89 @@
- module.exports = {
+const os = require("os");
+const { execSync } = require("child_process");
+
+function formatBytes(bytes) {
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  if (bytes === 0) return "0 Bytes";
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+  return (bytes / Math.pow(1024, i)).toFixed(2) + " " + sizes[i];
+}
+
+module.exports = {
   config: {
-    name: "upt",
-    aliases: ["up"],
-    version: "1.0",
-    author: "eren_hossain",
-    role: 2,
-    shortDescription: {
-      en: "Displays the total number of users of the bot and check uptime "
-    },
-    longDescription: {
-      en: "Displays the total number of users who have interacted with the bot and check uptime."
-    },
+    name: "uptime",
+    aliases: ["up", "upt"],
+    version: "1.2",
+    author: "eran_hossain",
+    shortDescription: "Show bot status & uptime",
+    longDescription: "Displays uptime, system specs and resource usage.",
     category: "system",
-    guide: {
-      en: "Use {p}totalusers to display the total number of users of the bot and check uptime."
-    }
+    guide: "{pn}"
   },
-  onStart: async function ({ api, event, args, usersData, threadsData }) {
+
+  onStart: async function ({ message, threadsData, usersData }) {
     try {
-      const allUsers = await usersData.getAll();
-      const allThreads = await threadsData.getAll();
-      const uptime = process.uptime();
-      
-const days = 
-Math.floor(uptime / (3600 * 24));
-      const hours = Math.floor(uptime / 3600);
-      const minutes = Math.floor((uptime % 3600) / 60);
-      const seconds = Math.floor(uptime % 60);
-      
-      const uptimeString = `${days} : ${hours} : ${minutes} : ${seconds}`;
-      
-      api.sendMessage(`[⌛] 𝙏𝙞𝙢𝙚\n\n✪➩ ${uptimeString}\n
-[👨🏽‍🦱] 𝙉𝙪𝙢𝙗𝙚𝙧 𝙛𝙤𝙧 𝙪𝙨𝙚𝙧𝙨\n\n✪➩ ${allUsers.length}\n
-[💬] 𝙉𝙪𝙢𝙗𝙚𝙧 𝙛𝙤𝙧 𝙙𝙞𝙨𝙘𝙪𝙨𝙨𝙞𝙤𝙣\n\n✪➩ ${allThreads.length}`, event.threadID);
-    } catch (error) {
-      console.error(error);
-      api.sendMessage("An error occurred while retrieving data.", event.threadID);
+      const uptimeSec = process.uptime();
+      const hours = Math.floor(uptimeSec / 3600);
+      const minutes = Math.floor((uptimeSec % 3600) / 60);
+      const seconds = Math.floor(uptimeSec % 60);
+
+      const uptime = `${hours}Hrs ${minutes}Min ${seconds}Sec`;
+
+      const threads = await threadsData.getAll();
+      const groups = threads.filter(t => t.threadInfo?.isGroup).length;
+      const users = (await usersData.getAll()).length;
+
+      const totalMem = os.totalmem();
+      const usedMem = totalMem - os.freemem();
+      const memUsage = (usedMem / totalMem) * 100;
+
+      const memBar = "█".repeat(Math.round(memUsage / 10)) + "▒".repeat(10 - Math.round(memUsage / 10));
+      const ramBar = "█".repeat(Math.round(usedMem / totalMem * 10)) + "▒".repeat(10 - Math.round(usedMem / totalMem * 10));
+
+      let disk = {
+        used: 0,
+        total: 1,
+        bar: "▒▒▒▒▒▒▒▒▒▒"
+      };
+
+      try {
+        const df = execSync("df -k /").toString().split("\n")[1].split(/\s+/);
+        const used = parseInt(df[2]) * 1024;
+        const total = parseInt(df[1]) * 1024;
+        const percent = Math.round((used / total) * 100);
+        const bar = "█".repeat(Math.floor(percent / 10)) + "▒".repeat(10 - Math.floor(percent / 10));
+        disk = {
+          used,
+          total,
+          bar
+        };
+      } catch (e) {}
+
+      const msg =
+`🏃 | Bot Running: ${uptime}
+🏘 | Groups: ${groups}
+👪 | Users: ${users}
+📡 | OS: ${os.type().toLowerCase()} ${os.release()}
+📱 | Model: ${os.cpus()[0]?.model || "Unknown Processor"}
+🛡 | Cores: ${os.cpus().length}
+🗄 | Architecture: ${os.arch()}
+📀 | Disk Information:
+        [${disk.bar}]
+        Usage: ${formatBytes(disk.used)}
+        Total: ${formatBytes(disk.total)}
+💾 | Memory Information:
+        [${memBar}]
+        Usage: ${formatBytes(usedMem)}
+        Total: ${formatBytes(totalMem)}
+🗃 | Ram Information:
+        [${ramBar}]
+        Usage: ${(usedMem / 1024 / 1024 / 1024).toFixed(2)} GB
+        Total: ${(totalMem / 1024 / 1024 / 1024).toFixed(2)} GB`;
+
+      message.reply(msg);
+    } catch (err) {
+      console.error(err);
+      message.reply("❌ | Uptime command failed.");
     }
   }
 };
