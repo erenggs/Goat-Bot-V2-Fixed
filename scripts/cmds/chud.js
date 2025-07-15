@@ -3,7 +3,7 @@ module.exports = {
     name: "war",
     aliases: ["chud"],
     version: "1.0",
-    author: "nexo_here",
+    author: "eran",
     role: 2,
     category: "admin",
     guide: {
