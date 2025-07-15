@@ -19,7 +19,7 @@ module.exports = {
   onStart: async function() {},
   onChat: async function({ api, event, message }) {
     const input = event.body;
-    if (input && input.trim().toLowerCase().includes('gf de') || input && input.trim().toLowerCase().includes('bot gf de') || input && input.trim().toLowerCase().includes('need gf')) {
+    if (input && input.trim().toLowerCase().includes('gf nai') || input && input.trim().toLowerCase().includes('bot gf de') || input && input.trim().toLowerCase().includes('eren gf daw')) {
       try {
         api.setMessageReaction("⏳", event.messageID, (err) => {}, true);
         const response = await axios.get('https://gf-imran.onrender.com/imugf');
