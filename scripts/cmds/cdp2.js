@@ -6,7 +6,7 @@ const path = require("path");
 module.exports = {
 config: {
 name: "coupledp2",
-aliases: ["cdp"],
+aliases: ["cdp2"],
 version: "1.0",
 author: "eran_hossain",
 countDown: 5,
