@@ -60,11 +60,11 @@ module.exports = {
       } catch (e) {}
 
       const msg =
-`🏃 | Bot Running: ${uptime}
-🏘 | Groups: ${groups}
+`⏳ | Bot Running: ${uptime}
+📊 | Groups: ${groups}
 👪 | Users: ${users}
 📡 | OS: ${os.type().toLowerCase()} ${os.release()}
-📱 | Model: ${os.cpus()[0]?.model || "Unknown Processor"}
+🖥️ | Model: ${os.cpus()[0]?.model || "Unknown Processor"}
 🛡 | Cores: ${os.cpus().length}
 🗄 | Architecture: ${os.arch()}
 📀 | Disk Information:
