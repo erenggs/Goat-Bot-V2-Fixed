@@ -5,7 +5,7 @@ const fs = require("fs-extra");
 module.exports = {
   config: {
     name: "pair",
-    aurthor:"eran",
+    aurthor:"xemon",
      role: 0,
     shortDescription: " ",
     longDescription: "",
