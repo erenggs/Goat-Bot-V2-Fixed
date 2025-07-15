@@ -6,7 +6,7 @@ module.exports = {
     name: "pair3",
     aliases: [],
     version: "1.0",
-    author: "eran",
+    author: "OTINXSANDIP",
     countDown: 5,
     role: 0,
     shortDescription: " ",
