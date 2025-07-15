@@ -3,7 +3,7 @@ module.exports = {
 		name: "pussy3",
 		aliases: ["18+"],
 		version: "1.0",
-		author: "Doru fix by kivv",
+		author: "eran",
 		countDown: 5,
 		role: 2,
 		shortDescription: "send you pic of pussy",
