@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "clown",
     version: "1.0",
-    author: "Chitron Bhattacharjee",
+    author: "eran",
     countDown: 5,
     role: 0,
     shortDescription: {
