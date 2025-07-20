@@ -1,0 +1,41 @@
+const axios = require("axios");
+
+module.exports = {
+  config: {
+    name: "nsfwneko",
+    aliases: ["nnek", "nsfwcatgirl"],
+    version: "1.0",
+    author: "eran",
+    countDown: 5,
+    role: 2, // Admin or adult role
+    shortDescription: {
+      en: "Send a random NSFW neko image",
+    },
+    longDescription: {
+      en: "Fetches and sends a random NSFW anime neko image (catgirl).",
+    },
+    category: "nsfw",
+    guide: {
+      en: "{pn}",
+    },
+  },
+
+  onStart: async function ({ api, event }) {
+    try {
+      const res = await axios.get("https://nekos.life/api/v2/img/lewd"); // Alternative: use "https://api.nekos.dev/api/v3/images/nsfw/img/neko_lewd/"
+      const imageUrl = res.data.url;
+
+      api.sendMessage(
+        {
+          body: "Here's your NSFW neko 😼",
+          attachment: await global.utils.getStreamFromURL(imageUrl),
+        },
+        event.threadID,
+        event.messageID
+      );
+    } catch (error) {
+      api.sendMessage("Failed to fetch image. Try again later.", event.threadID, event.messageID);
+      console.error(error);
+    }
+  },
+};
