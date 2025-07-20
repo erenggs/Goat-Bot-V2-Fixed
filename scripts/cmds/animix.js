@@ -4,7 +4,7 @@ const fs = require("fs-extra");
 module.exports = {
   config: {
     name: "animix",
-    aliases: ["animixpic", "anime"],
+    aliases: ["animixpic", "a"],
     version: "1.0",
     author: "eran",
     countDown: 5,
