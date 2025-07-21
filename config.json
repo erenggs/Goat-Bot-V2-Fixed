@@ -22,22 +22,10 @@
     "100083613360627",
     "100083613360627"
   ],
-"GOD": [
-    "100083613360627"
-  ],
-  "vipUser": [
-    "100083613360627"
-  ],
-  "DEV": [
-    "100083613360627"
-  ],
-  "orgDEV": [
-    "100083613360627"
-  ],
   "whiteListMode": {
     "enable": false,
     "whiteListIds": [
-      "100083039411474", "100063840894133"
+      "100083039411474", "100083613360627"
     ],
     "notes": "if you enable this feature, only the ids in the whiteListIds list can use the bot"
   },
