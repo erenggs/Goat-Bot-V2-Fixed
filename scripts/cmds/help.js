@@ -82,9 +82,9 @@ module.exports = {
         .map(c => `🖥️${c}`)
         .join(",\n│ ");
       total += categories[cat].length;
-      msg += `╭──^_^ ${formatCategoryTitle(cat)} 』\n`;
+      msg += `╭─────^_^ ${formatCategoryTitle(cat)} 』\n`;
       msg += `│ ${cmds}\n`;
-      msg += `╰────────°\n\n`;
+      msg += `╰────────────────°\n\n`;
     }
 
     msg += `◎ Eran_hossain Ai\n`;
