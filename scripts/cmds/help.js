@@ -79,17 +79,17 @@ module.exports = {
     for (const cat of sortedCats) {
       const cmds = categories[cat]
         .sort((a, b) => a.localeCompare(b))
-        .map(c => `✧${c}`)
+        .map(c => `🖥️${c}`)
         .join(",\n│ ");
       total += categories[cat].length;
-      msg += `╭──『 ${formatCategoryTitle(cat)} 』\n`;
+      msg += `╭──^_^ ${formatCategoryTitle(cat)} 』\n`;
       msg += `│ ${cmds}\n`;
-      msg += `╰────────♢\n\n`;
+      msg += `╰────────°\n\n`;
     }
 
     msg += `◎ Eran_hossain Ai\n`;
     msg += `Total Commands » ${total}\n`;
-    msg += `Use help (cmd name) to see cmd usage details`;
+    msg += `Use help cmd (cmd name)`;
 
     return message.reply(msg.trim());
   }
