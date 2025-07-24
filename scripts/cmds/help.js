@@ -3,7 +3,7 @@ module.exports = {
     name: "help",
     aliases: ["menu", "commands"],
     version: "2.0",
-    author: "nexo_here",
+    author: "eran",
     shortDescription: "Show all available commands",
     longDescription: "Display a categorized list of all available commands.",
     category: "system",
@@ -56,7 +56,7 @@ module.exports = {
     let msg = "📜 Help Menu\nHere are the available commands:\n\n";
 
     for (const cat of Object.keys(categories).sort()) {
-      msg += `${emojiMap[cat] || "📁"} ${capitalize(cat)}:\n`;
+      msg += `${emojiMap[cat] || "🖥️"} ${capitalize(cat)}:\n`;
       const cmds = categories[cat]
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(c => `• ${c.name}${c.desc}`);
