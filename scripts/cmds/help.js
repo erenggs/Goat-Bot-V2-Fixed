@@ -2,72 +2,95 @@ module.exports = {
   config: {
     name: "help",
     aliases: ["menu", "commands"],
-    version: "2.0",
-    author: "nexo_here",
+    version: "3.1",
+    author: "eran_hossain",
     shortDescription: "Show all available commands",
     longDescription: "Display a categorized list of all available commands.",
     category: "system",
-    guide: "{pn} [command name]"
+    guide: "{pn}help [command name]"
   },
 
-  onStart: async function ({ message, args, event, commandName, prefix }) {
+  onStart: async function ({ message, args, prefix }) {
     const allCommands = global.GoatBot.commands;
     const categories = {};
 
-    for (const [name, cmd] of allCommands) {
-      const cat = cmd.config.category || "others";
+    const cleanCategoryName = (text) => {
+      if (!text) return "others";
+      return text
+        .normalize("NFKD")
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+    };
+
+    const formatCategoryTitle = (text) => {
+      return text
+        .split(" ")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    };
+
+    for (const [, cmd] of allCommands) {
+      const rawCat = cmd.config.category || "others";
+      const cat = cleanCategoryName(rawCat);
       if (!categories[cat]) categories[cat] = [];
-      categories[cat].push({
-        name: cmd.config.name,
-        desc: cmd.config.shortDescription || ""
-      });
+      categories[cat].push(cmd.config.name);
     }
 
     if (args[0]) {
       const query = args[0].toLowerCase();
-      const cmd = allCommands.get(query) || [...allCommands.values()].find(c => c.config.aliases?.includes(query));
+      const cmd = allCommands.get(query) || [...allCommands.values()].find(c => (c.config.aliases || []).includes(query));
       if (!cmd) return message.reply(`❌ Command "${query}" not found.`);
 
-      const { name, description, category, guide, author, version, aliases } = cmd.config;
+      const {
+        name,
+        version,
+        author,
+        guide,
+        category,
+        shortDescription,
+        longDescription,
+        aliases
+      } = cmd.config;
+
+      const desc =
+        (typeof longDescription === "string")
+          ? longDescription
+          : (longDescription?.en || (typeof shortDescription === "string" ? shortDescription : (shortDescription?.en || "No description")));
+
       return message.reply(
-        `✨ Command Information:\n` +
-        `• Name: ${name}\n` +
-        `• Description: ${description || "No description"}\n` +
-        `• Category: ${category}\n` +
-        `• Aliases: ${aliases?.join(", ") || "None"}\n` +
-        `• Version: ${version}\n` +
-        `• Author: ${author}\n\n` +
-        `📘 Usage:\n${guide.replace(/{pn}/g, prefix + name)}`
+        `✨ Command Info\n\n` +
+        `Name: ${name}\n` +
+        `Category: ${category || "Unknown"}\n` +
+        `Description: ${desc}\n` +
+        `Aliases: ${aliases?.length ? aliases.join(", ") : "None"}\n` +
+        `Usage: ${typeof guide === "string" ? guide.replace(/{pn}/g, prefix) : prefix + name}\n` +
+        `Author: ${author || "Unknown"}\n` +
+        `Version: ${version || "1.0"}`
       );
     }
 
-    const emojiMap = {
-      "system": "🛠️",
-      "AI-IMAGE": "🏜️",
-      "info": "ℹ️",
-      "fun": "🎉",
-      "media": "🎬",
-      "economy": "💰",
-      "games": "🎮",
-      "tools": "🧰",
-      "others": "📁"
-    };
+    // Final message layout
+    let msg = "";
+    const sortedCats = Object.keys(categories).sort();
+    let total = 0;
 
-    let msg = "📜 Help Menu\nHere are the available commands:\n\n";
-
-    for (const cat of Object.keys(categories).sort()) {
-      msg += `${emojiMap[cat] || "📁"} ${capitalize(cat)}:\n`;
+    for (const cat of sortedCats) {
       const cmds = categories[cat]
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map(c => `• ${c.name}${c.desc}`);
-      msg += cmds.join("\n") + "\n\n";
+        .sort((a, b) => a.localeCompare(b))
+        .map(c => `🖥️${c}`)
+        .join(",\n│ ");
+      total += categories[cat].length;
+      msg += `╭─────^_^ ${formatCategoryTitle(cat)} 』\n`;
+      msg += `│ ${cmds}\n`;
+      msg += `╰────────────────*_*\n\n`;
     }
 
-    msg += `💡 Tip: Type "${prefix}help [command]" to view detailed info.`;
-    return message.reply(msg);
+    msg += `◎ Eran_hossain ggs_Ai\n`;
+    msg += `Total Commands » ${total}\n`;
+    msg += `Use help cmd (cmd name)`;
+
+    return message.reply(msg.trim());
   }
 };
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
