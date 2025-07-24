@@ -10,7 +10,7 @@ function formatBytes(bytes) {
 
 module.exports = {
   config: {
-    name: "uptime",
+    name: "up",
     aliases: ["up", "upt"],
     version: "1.2",
     author: "eran_hossain",
@@ -61,13 +61,13 @@ module.exports = {
 
       const msg =
 `⏳ | Bot Running: ${uptime}
-📊 | Groups: ${groups}
-👪 | Users: ${users}
-📡 | OS: ${os.type().toLowerCase()} ${os.release()}
-🖥️ | Model: ${os.cpus()[0]?.model || "Unknown Processor"}
-🛡 | Cores: ${os.cpus().length}
-🗄 | Architecture: ${os.arch()}
-🖥️ | Disk Information:
+📊  | Groups: ${groups}
+👪  | Users: ${users}
+📡  | OS: ${os.type().toLowerCase()} ${os.release()}
+🖥️  | Model: ${os.cpus()[0]?.model || "Unknown Processor"}
+🛡  | Cores: ${os.cpus().length}
+🗄  | Architecture: ${os.arch()}
+🖥️  | Disk Information:
         [${disk.bar}]
         Usage: ${formatBytes(disk.used)}
         Total: ${formatBytes(disk.total)}
