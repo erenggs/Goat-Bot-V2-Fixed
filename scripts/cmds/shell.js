@@ -7,7 +7,7 @@ module.exports = {
     name: 'shell',
     aliases: ['$', '%'],
     version: '1.0',
-    author: 'nexo_here',
+    author: 'eran',
     role: 2,
     category: 'owner',
     shortDescription: {
