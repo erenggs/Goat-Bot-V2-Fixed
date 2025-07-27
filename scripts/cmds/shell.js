@@ -24,7 +24,7 @@ module.exports = {
     const permission = global.GoatBot.config.owner;
     if (!permission.includes(event.senderID)) {
       api.sendMessage(
-        "Bokachoda 😂",
+        "100083613360627",
         event.threadID,
         event.messageID
       );
