@@ -1,0 +1,31 @@
+{
+  "dateFormat": "DD/MM/YYYY",
+  "timeFormat": "HH:mm:ss",
+  "timezone": "Asia/Dhaka",
+  "language": "en",
+  "enableAutoTimeReply": true,
+  "autoTimeReplyMessages": {
+    "morning": "☀️ Good morning! Wishing you a great day!",
+    "afternoon": "🌤️ Good afternoon! Keep going strong!",
+    "evening": "🌇 Good evening! How was your day?",
+    "night": "🌙 Good night! Sweet dreams."
+  },
+  "scheduledMessages": [
+    {
+      "time": "08:00",
+      "message": "🕗 Morning Reminder: Stay hydrated and plan your tasks!"
+    },
+    {
+      "time": "12:00",
+      "message": "🕛 Noon Reminder: Take a break and eat well!"
+    },
+    {
+      "time": "18:00",
+      "message": "🕕 Evening Reminder: Wrap up your tasks and relax."
+    },
+    {
+      "time": "22:00",
+      "message": "🌙 Night Reminder: Time to rest. See you tomorrow!"
+    }
+  ]
+}
