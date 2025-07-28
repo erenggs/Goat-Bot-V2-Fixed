@@ -82,14 +82,14 @@ module.exports = {
         .map(c => `🖥️${c}`)
         .join(",\n│ ");
       total += categories[cat].length;
-      msg += `╭─────^_^ ${formatCategoryTitle(cat)} 』\n`;
+      msg += '────────────────@_@ ${formatCategoryTitle(cat)} 』\n`;
       msg += `│ ${cmds}\n`;
-      msg += `╰────────────────*_*\n\n`;
+      msg += `╰──────────────────────@_@\n\n`;
     }
 
-    msg += `◎ Eran_hossain ggs_Ai\n`;
+    msg += `◎ Eran_hossain https://www.facebook.com/profile.php?id=100083613360627&mibextid=wwXIfr&mibextid=wwXIfr \n`;
     msg += `Total Commands » ${total}\n`;
-    msg += `Use help cmd (cmd name)`;
+    msg += `typ help (cmd name)`;
 
     return message.reply(msg.trim());
   }
