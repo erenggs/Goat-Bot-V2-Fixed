@@ -7,7 +7,7 @@ module.exports.config = {
     name: "bby",
     aliases: ["baby", "bbe", "babe", "sam", "bot", "chat"],
     version: "6.9.0",
-    author: "dipto | nexo_here",
+    author: "dipto | eran",
     countDown: 0,
     role: 0,
     description: "better than all sim simi",
@@ -149,7 +149,7 @@ module.exports.onChat = async ({ api, event, message }) => {
         const body = event.body ? event.body.toLowerCase() : "";
         if (body.startsWith("baby") || body.startsWith("bby") || body.startsWith("bot") || body.startsWith("jan") || body.startsWith("babu") || body.startsWith("janu")) {
             const arr = body.replace(/^\S+\s*/, "");
-            const randomReplies = ["Bol 🐸", "Bol suntechi 🐍", "Dakis ken 😾?", "Bolo jaan ki korte pari tomar jonno 😞"];
+            const randomReplies = ["Bolen 😿", "Bolo suntechi 🙂", "Dakis ken 😾?", "Bolo jaan ki korte pari tomar jonno 😞"];
             if (!arr) {
                 await api.sendMessage(randomReplies[Math.floor(Math.random() * randomReplies.length)], event.threadID, (error, info) => {
                     if (!info) message.reply("info obj not found");
