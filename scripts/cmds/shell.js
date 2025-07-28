@@ -1,56 +1,41 @@
-const { GoatWrapper } = require("fca-liane-utils");
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const { exec } = require('child_process');
 
 module.exports = {
-  config: {
-    name: 'shell',
-    aliases: ['$', '%'],
-    version: '1.0',
-    author: 'eran',
-    role: 2,
-    category: 'owner',
-    shortDescription: {
-      en: 'Executes terminal commands.',
-    },
-    longDescription: {
-      en: 'Executes terminal commands and returns the output.',
-    },
-    guide: {
-      en: '{pn} [command]',
-    },
-  },
-  onStart: async function ({ api, args, message, event }) {
-    const permission = global.GoatBot.config.owner;
-    if (!permission.includes(event.senderID)) {
-      api.sendMessage(
-        "100083613360627",
-        event.threadID,
-        event.messageID
-      );
-      return;
-    }
-    if (args.length === 0) {
-      message.reply('Usage: {pn} [command]');
-      return;
-    }
+ config: {
+ name: "shell",
+ aliases: ["sh" , "$"], 
+ version: "1.0",
+ author: "Eran",
+ countDown: 5,
+ role: 2,
+ shortDescription: "Execute shell commands",
+ longDescription: "",
+ category: "owner",
+ guide: {
+ en: "{p}{n} <command>" // Removed Vietnamese guide for simplicity
+ }
+ },
 
-    const command = args.join(' ');
+ onStart: async function ({ args, message, event, api }) {
+ const command = args.join(" ");
+ 
+ if (!command) {
+ return message.reply("Please provide a command to execute.");
+ }
 
-    try {
-      const { stdout, stderr } = await exec(command);
+ exec(command, (error, stdout, stderr) => {
+ if (error) {
+ console.error(`Error executing command: ${error}`);
+ return message.reply(`An error occurred while executing the command: ${error.message}`);
+ }
 
-      if (stderr) {
-        message.reply(`${stderr}`); // Fixed string interpolation
-      } else {
-        message.reply(`${stdout}`); // Fixed string interpolation
-      }
-    } catch (error) {
-      console.error(error);
-      message.reply(`Error: ${error.message}`); // Fixed string interpolation
-    }
-  },
+ if (stderr) {
+ console.error(`Command execution resulted in an error: ${stderr}`);
+ return message.reply(`Command execution resulted in an error: ${stderr}`);
+ }
+
+ console.log(`Command executed successfully:\n${stdout}`);
+ message.reply(`Command executed successfully:\n${stdout}`);
+ });
+ }
 };
-
-const wrapper = new GoatWrapper(module.exports);
-wrapper.applyNoPrefix({ allowPrefix: true });
