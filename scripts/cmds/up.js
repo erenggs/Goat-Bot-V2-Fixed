@@ -12,10 +12,10 @@ module.exports = {
   config: {
     name: "up",
     aliases: ["up", "upt"],
-    version: "1.2",
+    version: "1.3",
     author: "eran_hossain",
-    shortDescription: "Show bot status & uptime",
-    longDescription: "Displays uptime, system specs and resource usage.",
+    shortDescription: "Displays bot status and system health",
+    longDescription: "Gives details about bot uptime, system usage, and PC configuration.",
     category: "system",
     guide: "{pn}"
   },
@@ -27,7 +27,7 @@ module.exports = {
       const minutes = Math.floor((uptimeSec % 3600) / 60);
       const seconds = Math.floor(uptimeSec % 60);
 
-      const uptime = `${hours}Hrs ${minutes}Min ${seconds}Sec`;
+      const uptime = `${hours}h ${minutes}m ${seconds}s`;
 
       const threads = await threadsData.getAll();
       const groups = threads.filter(t => t.threadInfo?.isGroup).length;
@@ -37,13 +37,13 @@ module.exports = {
       const usedMem = totalMem - os.freemem();
       const memUsage = (usedMem / totalMem) * 100;
 
-      const memBar = "█".repeat(Math.round(memUsage / 10)) + "▒".repeat(10 - Math.round(memUsage / 10));
-      const ramBar = "█".repeat(Math.round(usedMem / totalMem * 10)) + "▒".repeat(10 - Math.round(usedMem / totalMem * 10));
+      const memBar = "🟩".repeat(Math.round(memUsage / 10)) + "⬜".repeat(10 - Math.round(memUsage / 10));
+      const ramBar = "🟩".repeat(Math.round(usedMem / totalMem * 10)) + "⬜".repeat(10 - Math.round(usedMem / totalMem * 10));
 
       let disk = {
         used: 0,
         total: 1,
-        bar: "▒▒▒▒▒▒▒▒▒▒"
+        bar: "⬜⬜⬜⬜⬜⬜⬜⬜⬜⬜"
       };
 
       try {
@@ -51,7 +51,7 @@ module.exports = {
         const used = parseInt(df[2]) * 1024;
         const total = parseInt(df[1]) * 1024;
         const percent = Math.round((used / total) * 100);
-        const bar = "█".repeat(Math.floor(percent / 10)) + "▒".repeat(10 - Math.floor(percent / 10));
+        const bar = "🟦".repeat(Math.floor(percent / 10)) + "⬜".repeat(10 - Math.floor(percent / 10));
         disk = {
           used,
           total,
@@ -60,30 +60,39 @@ module.exports = {
       } catch (e) {}
 
       const msg =
-`⏳ | Bot Running: ${uptime}
-📊  | Groups: ${groups}
-👪  | Users: ${users}
-📡  | OS: ${os.type().toLowerCase()} ${os.release()}
-🖥️  | Model: ${os.cpus()[0]?.model || "Unknown Processor"}
-🛡  | Cores: ${os.cpus().length}
-🗄  | Architecture: ${os.arch()}
-🖥️  | Disk Information:
-        [${disk.bar}]
-        Usage: ${formatBytes(disk.used)}
-        Total: ${formatBytes(disk.total)}
-💾 | Memory Information:
-        [${memBar}]
-        Usage: ${formatBytes(usedMem)}
-        Total: ${formatBytes(totalMem)}
-🗃 | Ram Information:
-        [${ramBar}]
-        Usage: ${(usedMem / 1024 / 1024 / 1024).toFixed(2)} GB
-        Total: ${(totalMem / 1024 / 1024 / 1024).toFixed(2)} GB`;
+`🔧 —[ SYSTEM STATUS PANEL ]—
+🔁 Uptime: ${uptime}
+👥 Users: ${users} | 💬 Groups: ${groups}
+
+💻 —[ HOST MACHINE INFO ]—
+🌐 OS: ${os.type()} ${os.release()}
+🔍 CPU: ${os.cpus()[0]?.model || "Unknown CPU"}
+💡 Cores: ${os.cpus().length}
+🧱 Architecture: ${os.arch()}
+🖥️ Type: ${os.platform().toUpperCase()}-BASED SYSTEM
+
+🗄️ —[ DISK USAGE ]—
+${disk.bar}
+📂 Used: ${formatBytes(disk.used)}
+📦 Total: ${formatBytes(disk.total)}
+
+💾 —[ MEMORY USAGE ]—
+${memBar}
+🔸 Used: ${formatBytes(usedMem)}
+🔹 Total: ${formatBytes(totalMem)}
+
+🧠 —[ RAM OVERVIEW ]—
+${ramBar}
+🔸 Used: ${(usedMem / 1024 / 1024 / 1024).toFixed(2)} GB
+🔹 Total: ${(totalMem / 1024 / 1024 / 1024).toFixed(2)} GB
+
+✅ Everything's running smoothly!
+`;
 
       message.reply(msg);
     } catch (err) {
       console.error(err);
-      message.reply("❌ | Uptime command failed.");
+      message.reply("⚠️ An error occurred while fetching system stats.");
     }
   }
 };
