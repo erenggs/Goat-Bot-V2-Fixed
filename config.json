@@ -37,9 +37,9 @@
     ],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
-  "nickNameBot": "MiKAS",
+  "nickNameBot": "MiKASA",
   "prefix": "?",
-  "adminPrefix": "∆",
+  "adminPrefix": "!",
   "database": {
     "type": "mongodb",
     "uriMongodb": "mongodb+srv://Ggs:111144440000@cluster0.zbv3s21.mongodb.net",
