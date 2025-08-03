@@ -1,0 +1,40 @@
+module.exports = {
+  config: {
+    name: "groupinfo",
+    version: "1.0",
+    author: "eran",
+    countDown: 5,
+    role: 0,
+    shortDescription: "Show group information",
+    longDescription: "Displays information about the current group (thread)",
+    category: "info"
+  },
+
+  onStart: async function ({ message, event, threadsData }) {
+    const threadID = event.threadID;
+
+    try {
+      const threadData = await threadsData.get(threadID);
+
+      const name = threadData.threadName || "Unnamed Group";
+      const emoji = threadData.emoji || "❔";
+      const memberCount = threadData.members ? Object.keys(threadData.members).length : 0;
+      const adminCount = threadData.adminIDs ? threadData.adminIDs.length : 0;
+      const approvalMode = threadData.approvalMode ? "✅ On" : "❌ Off";
+      const threadInfo = `
+📘 𝗚𝗿𝗼𝘂𝗽 𝗜𝗻𝗳𝗼:
+📝 𝗡𝗮𝗺𝗲: ${name}
+🆔 𝗚𝗿𝗼𝘂𝗽 𝗜𝗗: ${threadID}
+👥 𝗠𝗲𝗺𝗯𝗲𝗿𝘀: ${memberCount}
+👑 𝗔𝗱𝗺𝗶𝗻𝘀: ${adminCount}
+🔐 𝗔𝗽𝗽𝗿𝗼𝘃𝗮𝗹 𝗠𝗼𝗱𝗲: ${approvalMode}
+💠 𝗚𝗿𝗼𝘂𝗽 𝗘𝗺𝗼𝗷𝗶: ${emoji}
+`;
+
+      message.reply(threadInfo);
+    } catch (err) {
+      console.error(err);
+      message.reply("❌ Failed to fetch group info.");
+    }
+  }
+};
