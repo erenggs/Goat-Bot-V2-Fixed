@@ -26,9 +26,9 @@
     ""
   ],
   "whiteListMode": {
-    "enable": false,
+    "enable": true,
     "whiteListIds": [
-      "",
+      "100083613360627",
       "",
       "",
       "",
