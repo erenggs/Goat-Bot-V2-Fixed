@@ -1,16 +1,15 @@
 {
   "facebookAccount": {
-    "email": "ffan****@gmail.com",
-    "password": "***************",
+    "email": "",
+    "password": "",
     "2FASecret": "",
     "i_user": "",
     "proxy": null,
-    "userAgent": "Mozilla/5.0 (Linux; Android 12...)",
+    "userAgent": "Mozilla/5.0 (Linux; Android 12; M2102J20SG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Mobile Safari/537.36",
     "intervalGetNewCookie": 1440,
     "notes": "Auto-refresh Facebook cookies every 1 day. Set to null to disable."
   },
   "antiInbox": true,
-  "countDown": 15,
   "language": "en",
   "notesLanguage": "ISO 639-1 format (e.g., en, vi)",
   "adminOnly": {
@@ -19,7 +18,8 @@
     "hideNotiMessage": true
   },
   "adminBot": [
-    "100083613360627"
+    "100083613360627",
+    "517122843"
   ],
   "whiteListMode": {
     "enable": true,
@@ -28,12 +28,12 @@
     ],
     "notes": "Only users in this list can use the bot when enabled."
   },
-  "nickNameBot": "MIKASA",
+  "nickNameBot": "⚡PowerBotX",
   "prefix": "?",
   "adminPrefix": "!",
   "database": {
     "type": "mongodb",
-    "uriMongodb": "mongodb+srv://Ggs:<111144440000>@cluster0.zbv3s21.mongodb.net/?",
+    "uriMongodb": "mongodb+srv://Ggs:111144440000@cluster0.zbv3s21.mongodb.net",
     "autoSyncWhenStart": true,
     "autoRefreshThreadInfoFirstTime": true,
     "notes": "MongoDB highly recommended for performance and scaling."
@@ -41,15 +41,15 @@
   "timeZone": "Asia/Kathmandu",
   "credentials": {
     "gmailAccount": {
-      "email": "boto*****@gmail.com",
-      "clientId": "84879***************apps.googleusercontent.com",
-      "clientSecret": "GOCSPX-*************************",
-      "refreshToken": "1//***************************",
+      "email": "botofnexxo@gmail.com",
+      "clientId": "848792512039-g3mlfd39p9ttu82ga4kahk6kadjr0hcp.apps.googleusercontent.com",
+      "clientSecret": "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",
+      "refreshToken": "1//04nBMNYnfbedsCgYIARAAGAQSNwF-L9IrmyZIKKZaDmN9aqXhIuO1wxk2jpkXPf3zuL_KN-IU99BNhW7eUGCFrDr0hJetNkBFExg",
       "apiKey": ""
     },
     "gRecaptcha": {
-      "siteKey": "6LfU***************",
-      "secretKey": "6LfU***************"
+      "siteKey": "6LfU0TUrAAAAAJVy_tm-q9xlEIEeyBK4N8VwuGdZ",
+      "secretKey": "6LfU0TUrAAAAAOR_CE7oZV-8Eo83LsJmb12-lWFb"
     }
   },
   "dashBoard": {
@@ -63,7 +63,7 @@
     "socket": {
       "enable": true,
       "channelName": "uptime",
-      "verifyToken": "***************"
+      "verifyToken": "secureVerifyTokenHere"
     }
   },
   "autoRestart": {
@@ -96,13 +96,13 @@
     "notes": "Notify admins when account problem stops bot",
     "gmail": {
       "enable": true,
-      "emailGetNoti": "easi***********@gmail.com",
+      "emailGetNoti": "easiriqbalmahi@gmail.com",
       "note": "Use Gmail to notify admin"
     },
     "telegram": {
       "enable": true,
-      "botToken": "73871***************Bx7QCPY",
-      "chatId": ["1002183169237", "6164300010"],
+      "botToken": "7387163316:AAEwosLrm3z7O9ZmarV9copn0Pq7Bx7QCPY",
+      "chatId": "1002183169237 6164300010",
       "note": "Multiple chat IDs supported"
     },
     "discordHook": {
@@ -142,4 +142,4 @@
     "autoReconnect": true,
     "notes": "Advanced options for fb-chat-api stability and speed"
   }
-}
+  }
