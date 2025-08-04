@@ -1,7 +1,7 @@
 {
   "facebookAccount": {
-    "email": "",
-    "password": "",
+    "email": "ffan4684@gmail.com",
+    "password": "1uuuuuuuu@123",
     "2FASecret": "",
     "i_user": "",
     "proxy": null,
@@ -19,7 +19,7 @@
   },
   "adminBot": [
     "100083613360627",
-    "517122843"
+    ""
   ],
   "whiteListMode": {
     "enable": true,
@@ -102,7 +102,7 @@
     "telegram": {
       "enable": true,
       "botToken": "7387163316:AAEwosLrm3z7O9ZmarV9copn0Pq7Bx7QCPY",
-      "chatId": "1002183169237 6164300010",
+      "chatId": ["1002183169237 6164300010",]
       "note": "Multiple chat IDs supported"
     },
     "discordHook": {
