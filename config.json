@@ -33,7 +33,7 @@
   "adminPrefix": "!",
   "database": {
     "type": "mongodb",
-    "uriMongodb": "mongodb+srv://***:***@cluster0.zbv3s21.mongodb.net",
+    "uriMongodb": "mongodb+srv://Ggs:<111144440000>@cluster0.zbv3s21.mongodb.net/?",
     "autoSyncWhenStart": true,
     "autoRefreshThreadInfoFirstTime": true,
     "notes": "MongoDB highly recommended for performance and scaling."
