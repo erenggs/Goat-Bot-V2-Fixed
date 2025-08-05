@@ -14,26 +14,6 @@ module.exports = {
     const allCommands = global.GoatBot.commands;
     const categories = {};
 
-    const emojiMap = {
-      chat: "🖥️",
-      adduser: "🖥️",
-      admin: "🖥️", 
-      all: "🖥️",
-      antichangeinfobox: "🖥️",
-      badwords: "🖥️",
-      ban: "🖥️",
-      busy: "🖥️",   
-      count: "🖥️",
-      filteruser: "🖥️",
-      kick: "🖥️",
-      onlyadminbox: "🖥️",
-      refresh: "🖥️",
-      rules: "🖥️",
-      sendnoti: "🖥️",
-      setname: "🖥️",
-      unsend: "🖥️",
-      wanted: "🖥️",
-      warn: "🖥️",
     const cleanCategoryName = (text) => {
       if (!text) return "others";
       return text
