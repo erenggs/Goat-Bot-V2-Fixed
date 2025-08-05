@@ -14,6 +14,26 @@ module.exports = {
     const allCommands = global.GoatBot.commands;
     const categories = {};
 
+    const emojiMap = {
+      chat: "🖥️",
+      adduser: "🖥️",
+      admin: "🖥️", 
+      all: "🖥️",
+      antichangeinfobox: "🖥️",
+      badwords: "🖥️",
+      ban: "🖥️",
+      busy: "🖥️",   
+      count: "🖥️",
+      filteruser: "🖥️",
+      kick: "🖥️",
+      onlyadminbox: "🖥️",
+      refresh: "🖥️",
+      rules: "🖥️",
+      sendnoti: "🖥️",
+      setname: "🖥️",
+      unsend: "🖥️",
+      wanted: "🖥️",
+      warn: "🖥️",
     const cleanCategoryName = (text) => {
       if (!text) return "others";
       return text
@@ -88,8 +108,8 @@ module.exports = {
     }
 
     msg += `◎ Eran_hossain https://www.facebook.com/profile.php?id=100083613360627&mibextid=wwXIfr&mibextid=wwXIfr\n`;
-    msg += `Total Commands » ${total}\n`;
-    msg += `typ help cmd (cmd name)`;
+    msg += `Total Commands » ${20}\n`;
+    msg += `typ help cmd ()`;
 
     return message.reply(msg.trim());
   }
