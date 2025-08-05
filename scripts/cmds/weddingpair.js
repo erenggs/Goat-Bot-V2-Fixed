@@ -31,9 +31,9 @@ module.exports = {
     const name1 = user1.name;
     const name2 = user2.name;
 
-    const avatar1 = `https://graph.facebook.com/${id1}/picture?width=512&height=512`;
-    const avatar2 = `https://graph.facebook.com/${id2}/picture?width=512&height=512`;
-    const bgURL = "https://i.imgur.com/sq5KxoV.jpg"; // Wedding-themed background
+    const avatar1 = `https://graph.facebook.com/${event.senderID}/picture?width=720&height=720&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662 `;
+    const avatar2 = `https://graph.facebook.com/${selectedMatch.id}/picture?width=720&height=720&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
+    const bgURL = "https://i.imgur.com/Uj3bJtF.jpeg"; // Wedding-themed background
 
     const [img1, img2, bg] = await Promise.all([
       loadImage(avatar1),
