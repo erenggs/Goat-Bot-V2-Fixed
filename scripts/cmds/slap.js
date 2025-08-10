@@ -6,7 +6,7 @@ module.exports = {
  name: "slap",
  version: "1.1",
  author: "eran",
- countDown: 5,
+ countDown: 10,
  role: 0,
  shortDescription: "Batslap image",
  longDescription: "Batslap image",
