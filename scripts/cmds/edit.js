@@ -7,7 +7,7 @@ config: {
 name: "edit",
 version: "1.0",
 author: "Rifat | nxo_here",
-countDown: 5,
+countDown: 20,
 role: 0,
 shortDescription: { en: "Edit image using prompt" },
 longDescription: { en: "Edit an uploaded image based on your prompt." },
