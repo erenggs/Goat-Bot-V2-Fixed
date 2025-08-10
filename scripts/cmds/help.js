@@ -88,8 +88,8 @@ module.exports = {
     }
 
     msg += `◎ Eran_hossain https://www.facebook.com/profile.php?id=100083613360627&mibextid=wwXIfr&mibextid=wwXIfr\n`;
-    msg += `Total Commands » ${20}\n`;
-    msg += `typ help cmd ()`;
+    msg += `Total Commands » ${total}\n`;
+    msg += `?help ()`;
 
     return message.reply(msg.trim());
   }
