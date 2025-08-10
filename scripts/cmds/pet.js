@@ -1,46 +1,63 @@
 const axios = require("axios");
-const fs = require("fs");
+const fs = require("fs").promises;
 const path = require("path");
 
 module.exports = {
   config: {
     name: "pet",
-    version: "1.0",
+    version: "1.2",
     author: "nexo",
     countDown: 5,
     role: 0,
-    shortDescription: "Pet a user",
-    longDescription: "Generates a pet image/video for a tagged user",
+    shortDescription: "🐾 Pet a user",
+    longDescription: "Generates a cute pet image or video for a tagged user",
     category: "fun",
-    guide: "{p}pet @user"
+    guide: "{pn}pet @user"
   },
 
   onStart: async function ({ message, event, usersData }) {
-    const mentions = Object.keys(event.mentions);
-    if (mentions.length === 0) return message.reply("❌ Please tag a user.");
-
-    const userid = mentions[0];
-    const apiUrl = `https://betadash-api-swordslush-production.up.railway.app/pet?userid=${userid}`;
-
     try {
-      const res = await axios.get(apiUrl, { responseType: "arraybuffer" });
-      const contentType = res.headers["content-type"];
-      const ext = contentType.includes("gif") ? "gif" : contentType.includes("mp4") ? "mp4" : "jpg";
-      const filePath = path.join(__dirname, "cache", `pet_${userid}.${ext}`);
+      const mentions = Object.keys(event.mentions || {});
+      if (mentions.length === 0) {
+        return message.reply("❌ Please tag a user to pet!");
+      }
 
-      fs.writeFileSync(filePath, res.data);
+      const userid = mentions[0];
+      // Using waifu.pics API for 'pat' images (works with gif or jpg)
+      const apiUrl = `https://api.waifu.pics/sfw/pat`;
+
+      // Ensure cache directory exists
+      const cacheDir = path.join(__dirname, "cache");
+      await fs.mkdir(cacheDir, { recursive: true });
+
+      // Fetch image url from API
+      const { data } = await axios.get(apiUrl);
+
+      if (!data || !data.url) {
+        return message.reply("⚠️ Failed to get pet image. Try again later.");
+      }
+
+      const imageUrl = data.url;
+      const extMatch = imageUrl.match(/\.(gif|mp4|png|jpg|jpeg|webp)(\?|$)/i);
+      const ext = extMatch ? extMatch[1] : "jpg";
+
+      // Download image
+      const res = await axios.get(imageUrl, { responseType: "arraybuffer" });
+      const filePath = path.join(cacheDir, `pet_${userid}.${ext}`);
+      await fs.writeFile(filePath, res.data);
 
       const name = await usersData.getName(userid);
 
       await message.reply({
         body: `🐾 You petted ${name}!`,
-        attachment: fs.createReadStream(filePath)
+        attachment: await fs.readFile(filePath).then(data => Buffer.from(data))
       });
 
-      fs.unlinkSync(filePath);
-    } catch (err) {
-      console.error("❌ Pet command error:", err);
-      message.reply("⚠️ Failed to generate pet image/video.");
+      await fs.unlink(filePath);
+
+    } catch (error) {
+      console.error("❌ Pet command error:", error);
+      message.reply("⚠️ Failed to generate pet image/video. Please try again later.");
     }
   }
 };
