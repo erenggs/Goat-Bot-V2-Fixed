@@ -1,66 +1,85 @@
 "use strict";
 
-var utils = require("../utils");
-var log = require("npmlog");
+const utils = require("../utils");
+const log = require("npmlog");
 
 module.exports = function (defaultFuncs, api, ctx) {
+  /**
+   * Logout the current user from Facebook.
+   * @param {Function} [callback] - Optional callback (err).
+   * @returns {Promise<void>} Promise if no callback provided.
+   */
   return function logout(callback) {
-    var resolveFunc = function () { };
-    var rejectFunc = function () { };
-    var returnPromise = new Promise(function (resolve, reject) {
+    let resolveFunc, rejectFunc;
+
+    // Promise wrapper to support both callback and promise usage
+    const returnPromise = new Promise((resolve, reject) => {
       resolveFunc = resolve;
       rejectFunc = reject;
     });
 
     if (!callback) {
-      callback = function (err, friendList) {
+      callback = (err) => {
         if (err) return rejectFunc(err);
-
-        resolveFunc(friendList);
+        resolveFunc();
       };
     }
 
-    var form = {
-      pmid: "0"
-    };
+    const settingsMenuUrl =
+      "https://www.facebook.com/bluebar/modern_settings_menu/?help_type=364455653583099&show_contextual_help=1";
 
+    // Step 1: Get logout form data from settings menu page
     defaultFuncs
-      .post("https://www.facebook.com/bluebar/modern_settings_menu/?help_type=364455653583099&show_contextual_help=1", ctx.jar, form)
+      .post(settingsMenuUrl, ctx.jar, { pmid: "0" })
       .then(utils.parseAndCheckLogin(ctx, defaultFuncs))
-      .then(function (resData) {
-        var elem = resData.jsmods.instances[0][2][0].filter(function (v) {
-          return v.value === "logout";
-        })[0];
+      .then((resData) => {
+        const logoutElem = resData.jsmods.instances[0][2][0].find(
+          (v) => v.value === "logout"
+        );
+        if (!logoutElem) throw new Error("Logout element not found");
 
-        var html = resData.jsmods.markup.filter(function (v) {
-          return v[0] === elem.markup.__m;
-        })[0][1].__html;
+        const markupEntry = resData.jsmods.markup.find(
+          (v) => v[0] === logoutElem.markup.__m
+        );
+        if (!markupEntry) throw new Error("Logout markup not found");
 
-        var form = {
-          fb_dtsg: utils.getFrom(html, '"fb_dtsg" value="', '"'),
-          ref: utils.getFrom(html, '"ref" value="', '"'),
-          h: utils.getFrom(html, '"h" value="', '"')
-        };
+        const html = markupEntry[1].__html;
 
-        return defaultFuncs
-          .post("https://www.facebook.com/logout.php", ctx.jar, form)
-          .then(utils.saveCookies(ctx.jar));
+        const fb_dtsg = utils.getFrom(html, '"fb_dtsg" value="', '"');
+        const ref = utils.getFrom(html, '"ref" value="', '"');
+        const h = utils.getFrom(html, '"h" value="', '"');
+
+        if (!fb_dtsg || !ref || !h)
+          throw new Error("Missing logout form data fields");
+
+        return { fb_dtsg, ref, h };
       })
-      .then(function (res) {
-        if (!res.headers) throw { error: "An error occurred when logging out." };
-
+      // Step 2: Post logout form to perform logout
+      .then(({ fb_dtsg, ref, h }) => {
         return defaultFuncs
-          .get(res.headers.location, ctx.jar)
-          .then(utils.saveCookies(ctx.jar));
+          .post(
+            "https://www.facebook.com/logout.php",
+            ctx.jar,
+            { fb_dtsg, ref, h }
+          )
+          .then((res) => {
+            if (!res.headers || !res.headers.location)
+              throw new Error("Logout response missing redirect location");
+            return res.headers.location;
+          });
       })
-      .then(function () {
+      // Step 3: Follow redirect to complete logout process
+      .then((redirectUrl) => defaultFuncs.get(redirectUrl, ctx.jar))
+      .then(utils.saveCookies(ctx.jar))
+      // Step 4: Finalize logout context state and callback
+      .then(() => {
         ctx.loggedIn = false;
         log.info("logout", "Logged out successfully.");
         callback();
       })
-      .catch(function (err) {
+      .catch((err) => {
         log.error("logout", err);
-        return callback(err);
+        callback(err);
       });
 
     return returnPromise;
