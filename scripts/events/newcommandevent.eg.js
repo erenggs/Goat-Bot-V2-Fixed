@@ -1,53 +1,73 @@
 /**
  * @Vietnamese
- * Trước tiên bạn cần có kiến thức về javascript như biến, hàm, vòng lặp, mảng, object, promise, async/await,... bạn có thể tìm hiểu thêm tại đây: https://developer.mozilla.org/en-US/docs/Web/JavaScript hoặc tại đây: https://www.w3schools.com/js/
- * Tiếp theo là kiến thức về Nodejs như require, module.exports, ... bạn có thể tìm hiểu thêm tại đây: https://nodejs.org/en/docs/
- * Và kiến thức về api không chính thức của facebook như api.sendMessage, api.changeNickname,... bạn có thể tìm hiểu thêm tại đây: https://github.com/ntkhang03/fb-chat-api/blob/master/DOCS.md
- * Nếu tên file kết thúc bằng `.eg.js` thì nó sẽ không được load vào bot, nếu muốn load vào bot thì đổi phần mở rộng của file thành `.js`
+ * Đây là phiên bản nâng cấp xử lý tất cả sự kiện trong nhóm với NodeJS và API không chính thức của Facebook.
+ * Bao gồm kiểm tra khi có thành viên mới, gửi lời chào, và có thể mở rộng cho các sự kiện khác.
  */
 
 /**
  * @English
- * First you need to have knowledge of javascript such as variables, functions, loops, arrays, objects, promise, async/await, ... you can learn more at here: https://developer.mozilla.org/en-US/docs/Web/JavaScript or here: https://www.w3schools.com/js/
- * Next is knowledge of Nodejs such as require, module.exports, ... you can learn more at here: https://nodejs.org/en/docs/
- * And knowledge of unofficial facebook api such as api.sendMessage, api.changeNickname,... you can learn more at here: https://github.com/ntkhang03/fb-chat-api/blob/master/DOCS.md
- * If the file name ends with `.eg.js` then it will not be loaded into the bot, if you want to load it into the bot then change the file extension to `.js`
+ * This is an upgraded version that handles all events in the group using NodeJS and unofficial Facebook API.
+ * It includes new member greetings and can be extended to handle more events.
  */
 
 module.exports = {
-	config: {
-		name: "commandName", // Name of command, it must be unique to identify with other commands
-		version: "1.0", // Version of command
-		author: "NTKhang", // Author of command
-		category: "events" // Category of command, it must be "events" to identify with other commands
-	},
+    config: {
+        name: "allEventsHandler", // Unique name for command
+        version: "2.0", // Version upgraded
+        author: "NTKhang + eran", // Author
+        category: "events" // Must be "events"
+    },
 
-	langs: {
-		vi: {
-			hello: "xin chào thành viên mới",
-			helloWithName: "xin chào thành vien mới, id facebook của bạn là %1"
-		}, // Vietnamese language
-		en: {
-			hello: "hello new member",
-			helloWithName: "hello new member, your facebook id is %1"
-		} // English language
-	},
+    langs: {
+        vi: {
+            hello: "xin chào thành viên mới",
+            helloWithName: "xin chào thành viên mới, id facebook của bạn là %1"
+        },
+        en: {
+            hello: "hello new member",
+            helloWithName: "hello new member, your facebook id is %1"
+        }
+    },
 
-	// onStart is a function that will be executed when has new event in group (see more at https://github.com/ntkhang03/fb-chat-api/blob/master/DOCS.md#apilistenmqttcallback (Event Type: "event"))
-	onStart: async function ({ api, usersData, threadsData, message, event, userModel, threadModel, prefix, dashBoardModel, globalModel, dashBoardData, globalData, envCommands, envEvents, envGlobal, role, getLang , commandName }) {
-		// YOUR CODE HERE, use console.log() to see all properties in variables above
+    /**
+     * onStart executes for any new event
+     */
+    onStart: async function ({ api, usersData, threadsData, message, event, userModel, threadModel, prefix, dashBoardModel, globalModel, dashBoardData, globalData, envCommands, envEvents, envGlobal, role, getLang, commandName }) {
+        try {
+            // Handle user joined group
+            if (event.logMessageType === "log:subscribe") {
+                const addedUsers = event.logMessageData.addedParticipants;
+                
+                for (const user of addedUsers) {
+                    // Send simple hello
+                    await message.send(getLang("hello"));
 
-		// example when user join group
+                    // Send hello with user's name (uncomment if needed)
+                    // await message.send(getLang("helloWithName", user.fullName));
+                }
+            }
 
-		// check if event is user join group, see more at https://github.com/ntkhang03/fb-chat-api/blob/master/DOCS.md#apilistenmqttcallback
-		if (event.logMessageType == "log:subscribe") { 
-			// getLang is a function to get language of command
+            // Handle user left group
+            if (event.logMessageType === "log:unsubscribe") {
+                const leftUsers = event.logMessageData.leftParticipants;
+                for (const user of leftUsers) {
+                    await message.send(`User ${user.fullName} has left the group.`);
+                }
+            }
 
-			// getLang without parameter is a function to get language of command without parameter
-			message.send(getLang("hello"));
+            // Handle other types of events dynamically
+            if (global.GoatBot?.onEvent) {
+                for (const fn of global.GoatBot.onEvent) {
+                    try {
+                        await fn({ api, usersData, threadsData, message, event, userModel, threadModel, prefix, dashBoardModel, globalModel, dashBoardData, globalData, envCommands, envEvents, envGlobal, role, getLang, commandName });
+                    } catch (e) {
+                        console.error(`Error in registered onEvent:`, e);
+                    }
+                }
+            }
 
-			// getLang with parameter is a function to get language of command with parameter (delete // in line below to test)
-			// message.send(getLang("helloWithName", event.logMessageData.addedParticipants[0].fullName));
-		}
-	}
+        } catch (error) {
+            console.error(`Error in ${commandName} event:`, error);
+        }
+    }
 };
