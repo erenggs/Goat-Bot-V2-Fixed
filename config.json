@@ -1,7 +1,7 @@
 {
   "facebookAccount": {
-    "email": "",
-    "password": "",
+    "email": "natashayeager39@gmail.com",
+    "password": "Natashayeager@",
     "2FASecret": "",
     "i_user": "",
     "proxy": null,
@@ -19,7 +19,7 @@
   },
   "adminBot": [
     "100083613360627",
-    "517122843"
+    ""
   ],
   "whiteListMode": {
     "enable": true,
