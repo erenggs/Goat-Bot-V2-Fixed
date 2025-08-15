@@ -4,8 +4,8 @@ module.exports = {
     aliases: ["pfp", "pp"],
     version: "1.1",
     author: "eran",
-    countDown: 5,
-    role: 0,
+    countDown: 10,
+    role: 2,
     description: "PROFILE image",
     category: "image",
     guide: { en: "{pn} @tag or userID or reply to a message or provide a Facebook URL" }
