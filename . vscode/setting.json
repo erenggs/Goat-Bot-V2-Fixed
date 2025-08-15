@@ -1,6 +1,21 @@
 {
-	"editor.formatOnSave": false,
+	// ==== Editor Settings ====
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"editor.formatOnType": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.tabSize": 2,
+	"editor.insertSpaces": true,
+	"editor.detectIndentation": false,
+	"editor.trimAutoWhitespace": true,
+	"editor.renderWhitespace": "all",
+	"editor.wordWrap": "on",
+	"editor.minimap.enabled": true,
+	"editor.bracketPairColorization.enabled": true,
+	"editor.guides.bracketPairs": true,
+	"editor.rulers": [80, 100, 120],
+
+	// ==== Prettier Settings ====
 	"prettier.singleQuote": true,
 	"prettier.trailingComma": "es5",
 	"prettier.printWidth": 100,
@@ -9,6 +24,14 @@
 	"prettier.arrowParens": "avoid",
 	"prettier.semi": true,
 	"prettier.endOfLine": "lf",
+	"prettier.useTabs": false,
+	"prettier.proseWrap": "preserve",
+	"prettier.tabWidth": 2,
+	"prettier.htmlWhitespaceSensitivity": "css",
+	"prettier.vueIndentScriptAndStyle": true,
+	"prettier.embeddedLanguageFormatting": "auto",
+
+	// ==== JavaScript Formatting ====
 	"javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
 	"javascript.format.wrapLogicalExpressions": true,
 	"javascript.format.breakBeforeBinaryOperators": true,
@@ -30,21 +53,34 @@
 	"javascript.format.insertSpaceAfterBlockComments": true,
 	"javascript.format.insertSpaceBeforeLineComments": true,
 	"javascript.format.insertSpaceAfterLineComments": true,
-	"javascript.format.insertSpaceBeforeKeywordsInControlFlowStatements": true,
-	"javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
-	"javascript.format.insertSpaceBeforeFunctionKeyword": true,
-	"javascript.format.insertSpaceBetweenFunctionKeywordAndParenthesis": true,
-	"javascript.format.insertSpaceAfterFunctionName": true,
-	"javascript.format.insertSpaceAfterComma": true,
-	"javascript.format.insertSpaceAfterSemicolon": true,
-	"javascript.format.insertSpaceBeforeColon": true,
-	"javascript.format.insertSpaceAfterColon": true,
-	"javascript.format.insertSpaceAroundOperators": true,
-	"javascript.format.insertSpaceBeforeBlockComments": true,
-	"javascript.format.insertSpaceAfterBlockComments": true,
-	"javascript.format.insertSpaceBeforeLineComments": true,
-	"javascript.format.insertSpaceAfterLineComments": true,
+
+	// ==== TypeScript Formatting ====
+	"typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
+	"typescript.format.placeOpenBraceOnNewLineForFunctions": false,
+	"typescript.format.insertSpaceAfterCommaDelimiter": true,
+	"typescript.format.insertSpaceAfterSemicolonInForStatements": true,
+	"typescript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
+	"typescript.format.insertSpaceAfterConstructor": false,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+	"typescript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+
+	// ==== Language Specific Formatters ====
 	"[javascript]": {
 		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	}
 }
