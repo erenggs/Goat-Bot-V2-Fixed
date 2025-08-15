@@ -7,7 +7,7 @@ module.exports = {
     name: "rip2",
     version: "2.0",
     author: "eran",
-    countDown: 5,
+    countDown: 20,
     role: 0,
     shortDescription: "Custom RIP image",
     longDescription: "Generates a RIP image with anime graveyard background",
@@ -26,7 +26,7 @@ module.exports = {
     const avatar = await loadImage(avatarURL);
 
     // 🖼️ Use uploaded image as RIP background (hosted on Imgur)
-    const background = await loadImage("https://i.imgur.com/MOs7gTp.jpeg");
+    const background = await loadImage("https://i.imgur.com/UNAjXIr.png");
 
     const canvas = createCanvas(background.width, background.height);
     const ctx = canvas.getContext("2d");
