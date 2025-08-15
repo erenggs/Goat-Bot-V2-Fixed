@@ -1,6 +1,6 @@
 {
-	// ==== Editor Settings ====
-	"editor.formatOnSave": true,
+	// ==== Global Editor Settings ====
+	"editor.formatOnSave": false,
 	"editor.formatOnPaste": true,
 	"editor.formatOnType": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -15,7 +15,7 @@
 	"editor.guides.bracketPairs": true,
 	"editor.rulers": [80, 100, 120],
 
-	// ==== Prettier Settings ====
+	// ==== Prettier Global Settings ====
 	"prettier.singleQuote": true,
 	"prettier.trailingComma": "es5",
 	"prettier.printWidth": 100,
@@ -67,14 +67,11 @@
 	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
 	"typescript.format.placeOpenBraceOnNewLineForControlBlocks": false,
 
-	// ==== Language Specific Formatters ====
+	// ==== Language Specific ====
 	"[javascript]": {
 		"editor.defaultFormatter": "vscode.typescript-language-features"
 	},
 	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[json]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[html]": {
@@ -82,5 +79,29 @@
 	},
 	"[css]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[yaml]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[python]": {
+		"editor.defaultFormatter": "ms-python.python"
+	},
+	"[php]": {
+		"editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+	},
+	"[java]": {
+		"editor.defaultFormatter": "redhat.java"
+	},
+	"[c]": {
+		"editor.defaultFormatter": "ms-vscode.cpptools"
+	},
+	"[cpp]": {
+		"editor.defaultFormatter": "ms-vscode.cpptools"
 	}
 }
