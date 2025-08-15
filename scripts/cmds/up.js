@@ -24,7 +24,8 @@ module.exports = {
     aliases: ["uptime", "status", "sys"],
     version: "5.0.0",
     author: "eran",
-    shortDescription: "💻 World’s strongest system monitor",
+    role: 2, // Change to 2 if you want admin-only access
+    : "💻 World’s strongest system monitor",
     longDescription: "Elite uptime, RAM, CPU, and disk stats with animated bars and perfect alignment.",
     category: "system",
     guide: "{pn} — Display premium system monitor"
