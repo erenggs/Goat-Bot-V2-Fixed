@@ -7,7 +7,7 @@ module.exports = {
     version: "1.6.9",
     author: "Nazrul",
     countDown: 10,
-    role: 0,
+    role: 2,
     shortDescription: "Pair users with the opposite gender",
     longDescription: "If the sender is male, they are paired with a random female, and if the sender is female, they are paired with a random male.",
     category: "love",
