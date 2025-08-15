@@ -7,7 +7,7 @@ module.exports = {
     name: "rip2",
     version: "2.0",
     author: "eran",
-    countDown: 20,
+    countDown: 10,
     role: 0,
     shortDescription: "Custom RIP image",
     longDescription: "Generates a RIP image with anime graveyard background",
