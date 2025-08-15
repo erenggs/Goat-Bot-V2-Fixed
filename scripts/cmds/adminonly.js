@@ -6,64 +6,64 @@ module.exports = {
 	config: {
 		name: "adminonly",
 		aliases: ["adonly", "onlyad", "onlyadmin"],
-		version: "1.5",
-		author: "NTKhang",
-		countDown: 5,
+		version: "1.8",
+		author: "eran",
+		countDown: 10,
 		role: 2,
 		description: {
-			vi: "bật/tắt chế độ chỉ admin mới có thể sử dụng bot",
-			en: "turn on/off only admin can use bot"
+			vi: "Bật/tắt chế độ chỉ admin mới có thể sử dụng bot",
+			en: "Turn on/off only admin can use bot"
 		},
 		category: "owner",
 		guide: {
-			vi: "   {pn} [on | off]: bật/tắt chế độ chỉ admin mới có thể sử dụng bot"
-				+ "\n   {pn} noti [on | off]: bật/tắt thông báo khi người dùng không phải là admin sử dụng bot",
-			en: "   {pn} [on | off]: turn on/off the mode only admin can use bot"
-				+ "\n   {pn} noti [on | off]: turn on/off the notification when user is not admin use bot"
+			vi: "✅ {pn} [on | off]: Bật/tắt chế độ chỉ admin mới có thể sử dụng bot\n🔔 {pn} noti [on | off]: Bật/tắt thông báo khi người dùng không phải admin",
+			en: "✅ {pn} [on | off]: Turn on/off the mode only admin can use bot\n🔔 {pn} noti [on | off]: Turn on/off the notification when user is not admin"
 		}
 	},
 
 	langs: {
 		vi: {
-			turnedOn: "Đã bật chế độ chỉ admin mới có thể sử dụng bot",
-			turnedOff: "Đã tắt chế độ chỉ admin mới có thể sử dụng bot",
-			turnedOnNoti: "Đã bật thông báo khi người dùng không phải là admin sử dụng bot",
-			turnedOffNoti: "Đã tắt thông báo khi người dùng không phải là admin sử dụng bot"
+			turnedOn: "✅ Đã bật chế độ chỉ admin mới có thể sử dụng bot",
+			turnedOff: "❌ Đã tắt chế độ chỉ admin mới có thể sử dụng bot",
+			turnedOnNoti: "🔔 Đã bật thông báo khi người dùng không phải là admin sử dụng bot",
+			turnedOffNoti: "🔕 Đã tắt thông báo khi người dùng không phải là admin sử dụng bot"
 		},
 		en: {
-			turnedOn: "Turned on the mode only admin can use bot",
-			turnedOff: "Turned off the mode only admin can use bot",
-			turnedOnNoti: "Turned on the notification when user is not admin use bot",
-			turnedOffNoti: "Turned off the notification when user is not admin use bot"
+			turnedOn: "✅ Turned on the mode only admin can use bot",
+			turnedOff: "❌ Turned off the mode only admin can use bot",
+			turnedOnNoti: "🔔 Turned on the notification when user is not admin use bot",
+			turnedOffNoti: "🔕 Turned off the notification when user is not admin use bot"
 		}
 	},
 
-	onStart: function ({ args, message, getLang }) {
-		let isSetNoti = false;
-		let value;
-		let indexGetVal = 0;
+	onStart: async function ({ args, message, getLang }) {
+		try {
+			// Determine if user wants to toggle notifications
+			const isNotification = args[0]?.toLowerCase() === "noti";
+			const actionArg = isNotification ? args[1]?.toLowerCase() : args[0]?.toLowerCase();
 
-		if (args[0] == "noti") {
-			isSetNoti = true;
-			indexGetVal = 1;
+			// Validate input
+			if (!["on", "off"].includes(actionArg)) return message.SyntaxError();
+
+			const value = actionArg === "on";
+
+			// Update config
+			if (isNotification) {
+				config.hideNotiMessage = config.hideNotiMessage || {};
+				config.hideNotiMessage.adminOnly = !value;
+				message.reply(getLang(value ? "turnedOnNoti" : "turnedOffNoti"));
+			} else {
+				config.adminOnly = config.adminOnly || {};
+				config.adminOnly.enable = value;
+				message.reply(getLang(value ? "turnedOn" : "turnedOff"));
+			}
+
+			// Save updated config
+			await fs.writeFile(client.dirConfig, JSON.stringify(config, null, 2));
+
+		} catch (err) {
+			console.error("❌ Error in adminonly command:", err);
+			message.reply("❌ An error occurred while updating the config.");
 		}
-
-		if (args[indexGetVal] == "on")
-			value = true;
-		else if (args[indexGetVal] == "off")
-			value = false;
-		else
-			return message.SyntaxError();
-
-		if (isSetNoti) {
-			config.hideNotiMessage.adminOnly = !value;
-			message.reply(getLang(value ? "turnedOnNoti" : "turnedOffNoti"));
-		}
-		else {
-			config.adminOnly.enable = value;
-			message.reply(getLang(value ? "turnedOn" : "turnedOff"));
-		}
-
-		fs.writeFileSync(client.dirConfig, JSON.stringify(config, null, 2));
 	}
 };
