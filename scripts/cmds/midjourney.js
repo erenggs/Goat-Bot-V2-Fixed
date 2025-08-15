@@ -9,7 +9,7 @@ module.exports = {
     version: "1.0",
     author: "eran",
     countDown: 10,
-    role: 0,
+    role: 2,
     shortDescription: "Generate image with Midjourney style",
     longDescription: "AI image generator using Midjourney v4 with U1–U4 & V1–V4 features",
     category: "ai-image",
