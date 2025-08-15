@@ -36,7 +36,7 @@ module.exports = {
     },
   },
   onStart: async function ({ api, event, args }) {
-     api.setMessageReaction("✨", event.messageID, (err) => {}, true);
+     api.setMessageReaction("💀", event.messageID, (err) => {}, true);
     const query = args.join(' ');
     const modifiedQuery = `${query} anime edit`;
 
