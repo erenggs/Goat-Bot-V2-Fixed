@@ -1,65 +1,92 @@
 const createFuncMessage = global.utils.message;
 const handlerCheckDB = require("./handlerCheckData.js");
 
-module.exports = (api, threadModel, userModel, dashBoardModel, globalModel, usersData, threadsData, dashBoardData, globalData) => {
-	const handlerEvents = require(process.env.NODE_ENV == 'development' ? "./handlerEvents.dev.js" : "./handlerEvents.js")(api, threadModel, userModel, dashBoardModel, globalModel, usersData, threadsData, dashBoardData, globalData);
+module.exports = (
+	api,
+	threadModel,
+	userModel,
+	dashBoardModel,
+	globalModel,
+	usersData,
+	threadsData,
+	dashBoardData,
+	globalData
+) => {
+	// Load event handlers based on environment
+	const handlerEvents = require(
+		process.env.NODE_ENV === "development" ? "./handlerEvents.dev.js" : "./handlerEvents.js"
+	)(api, threadModel, userModel, dashBoardModel, globalModel, usersData, threadsData, dashBoardData, globalData);
 
 	return async function (event) {
-		// Check if the bot is in the inbox and anti inbox is enabled
+		// Anti-inbox check
 		if (
-			global.GoatBot.config.antiInbox == true &&
-			(event.senderID == event.threadID || event.userID == event.senderID || event.isGroup == false) &&
-			(event.senderID || event.userID || event.isGroup == false)
-		)
-			return;
+			global.GoatBot.config.antiInbox &&
+			(event.senderID === event.threadID || event.userID === event.senderID || !event.isGroup)
+		) return;
 
+		// Create message helper
 		const message = createFuncMessage(api, event);
 
+		// Ensure DB is synced for users and threads
 		await handlerCheckDB(usersData, threadsData, event);
+
+		// Process event with handler
 		const handlerChat = await handlerEvents(event, message);
-		if (!handlerChat)
-			return;
+		if (!handlerChat) return;
 
 		const {
-			onAnyEvent, onFirstChat, onStart, onChat,
-			onReply, onEvent, handlerEvent, onReaction,
-			typ, presence, read_receipt
+			onAnyEvent,
+			onFirstChat,
+			onStart,
+			onChat,
+			onReply,
+			onEvent,
+			handlerEvent,
+			onReaction,
+			typ,
+			presence,
+			read_receipt,
 		} = handlerChat;
 
+		// Run universal event hook
+		if (typeof onAnyEvent === "function") onAnyEvent();
 
-		onAnyEvent();
+		// Handle specific event types
 		switch (event.type) {
 			case "message":
 			case "message_reply":
 			case "message_unsend":
-				onFirstChat();
-				onChat();
-				onStart();
-				onReply();
+				if (typeof onFirstChat === "function") onFirstChat();
+				if (typeof onChat === "function") onChat();
+				if (typeof onStart === "function") onStart();
+				if (typeof onReply === "function") onReply();
 				break;
-			case "event":
-				handlerEvent();
-				onEvent();
-				break;
-			case "message_reaction":
-				onReaction();
-				break;
-			case "typ":
-				typ();
-				break;
-			case "presence":
-				presence();
-				break;
-			case "read_receipt":
-				read_receipt();
-				break;
-			// case "friend_request_received":
-			// { /* code block */ }
-			// break;
 
-			// case "friend_request_cancel"
-			// { /* code block */ }
-			// break;
+			case "event":
+				if (typeof handlerEvent === "function") handlerEvent();
+				if (typeof onEvent === "function") onEvent();
+				break;
+
+			case "message_reaction":
+				if (typeof onReaction === "function") onReaction();
+				break;
+
+			case "typ":
+				if (typeof typ === "function") typ();
+				break;
+
+			case "presence":
+				if (typeof presence === "function") presence();
+				break;
+
+			case "read_receipt":
+				if (typeof read_receipt === "function") read_receipt();
+				break;
+
+			// future friend request events placeholders
+			// case "friend_request_received": break;
+			// case "friend_request_cancel": break;
+
 			default:
 				break;
 		}
