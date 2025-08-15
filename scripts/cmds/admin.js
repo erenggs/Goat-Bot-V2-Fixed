@@ -7,7 +7,7 @@ module.exports = {
 		aliases: ["adminrole", "adm", "ad"],
 		version: "1.8", // 🔄 Updated version
 		author: "eran",
-		countDown: 5,
+		countDown: 10,
 		role: 2,
 		description: {
 			vi: "🛠️ Thêm, xóa, sửa quyền admin",
