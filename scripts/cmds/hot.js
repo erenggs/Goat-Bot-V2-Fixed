@@ -6,8 +6,8 @@ module.exports = {
 		aliases: ["spicy", "sauce"],
 		version: "1.0",
 		author: "eran",
-		countDown: 5,
-		role: 0, // Change to 2 if you want admin-only access
+		countDown: 10,
+		role: 2, // Change to 2 if you want admin-only access
 		shortDescription: "Send a spicy NSFW anime image",
 		longDescription: "Sends a random hot anime image from waifu.pics (NSFW). Choose a category or default to 'waifu'.",
 		category: "nsfw",
