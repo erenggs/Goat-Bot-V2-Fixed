@@ -4,7 +4,7 @@ module.exports = {
     aliases: ["pfpp", "ppp", "プロフ"],
     version: "1.2",
     author: "eran",
-    countDown: 5,
+    countDown: 10,
     role: 0,
     description: "ユーザーのプロフィール画像を表示します。",
     category: "画像",
