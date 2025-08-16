@@ -7,7 +7,7 @@ module.exports = {
         version: "2.0",
         author: "eran",
         countDown: 10,
-        role: 10, // 0 = everyone
+        role: 2, // 0 = everyone
         category: "nsfw",
         description: "Sends a random NSFW/ecchi anime image with multiple categories",
         usage: "ecchi [category]\nCategories: ecchi, yuri, yaoi, trap, futa, neko, foxgirl"
